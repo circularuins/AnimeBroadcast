@@ -77,7 +77,6 @@ public class RoomActivity extends ActionBarActivity {
         listChat = (ListView)findViewById(R.id.listChat);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         listChat.setAdapter(adapter);
-        room = "hoge";
 
         AsyncHttpClient.getDefaultInstance().websocket(
                 "ws://circularuins.com:3003/chat?user=" + room + "/" + id,
