@@ -54,9 +54,9 @@ public class RoomActivity extends ActionBarActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ButterKnife.inject(this);
-        String room = getIntent().getStringExtra("room");
-        String id = getIntent().getStringExtra("id");
-        roomTitle.setText(room);
+        String roomId = getIntent().getStringExtra("room_id");
+        String roomName = getIntent().getStringExtra("room_name");
+        roomTitle.setText(roomName);
         gson = new Gson();
 
         //キーボード表示を制御するためのオブジェクト
@@ -77,9 +77,11 @@ public class RoomActivity extends ActionBarActivity {
         listChat = (ListView)findViewById(R.id.listChat);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         listChat.setAdapter(adapter);
+        String userId = "hoge"; //TODO 一旦決め打ち 初回起動時にユニークIDを取得するようにする
+        String wsUrl = "ws://circularuins.com:3003/chat?user=" + roomId + "/" + userId;
 
         AsyncHttpClient.getDefaultInstance().websocket(
-                "ws://circularuins.com:3003/chat?user=" + room + "/" + id,
+                wsUrl,
                 "my-protocol",
                 new AsyncHttpClient.WebSocketConnectCallback() {
                     @Override
@@ -108,7 +110,11 @@ public class RoomActivity extends ActionBarActivity {
                                                 @Override
                                                 public void onDone(Object result) {
                                                     Chat chat = gson.fromJson(recieveChat, Chat.class);
-                                                    adapter.add(chat.getChatText());
+                                                    if(chat.getChatText() != null) {
+                                                        adapter.add(chat.getChatText());
+                                                    } else {
+                                                        adapter.add(chat.getReturnMessage());
+                                                    }
                                                     adapter.notifyDataSetChanged();
                                                     editChat.getEditableText().clear();
                                                 }

@@ -143,8 +143,8 @@ public class RoomListFragment extends ListFragment {
 
         RowModel model = getModel(position);
         Intent intent = new Intent(getActivity(), RoomActivity.class);
-        intent.putExtra("room", model.name);
-        intent.putExtra("id", model.id);
+        intent.putExtra("room_id", model.id);
+        intent.putExtra("room_name", model.name);
         startActivity(intent);
     }
 }

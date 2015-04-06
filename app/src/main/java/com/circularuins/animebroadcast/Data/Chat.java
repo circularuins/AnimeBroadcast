@@ -16,6 +16,9 @@ public class Chat {
     @SerializedName("time")
     private String postTime;
 
+    @SerializedName("message")
+    private String returnMessage;
+
     public String getUserId() {
         return userId;
     }
@@ -38,5 +41,13 @@ public class Chat {
 
     public void setPostTime(String postTime) {
         this.postTime = postTime;
+    }
+
+    public String getReturnMessage() {
+        return returnMessage;
+    }
+
+    public void setReturnMessage(String returnMessage) {
+        this.returnMessage = returnMessage;
     }
 }
