@@ -1,161 +1,115 @@
 package com.circularuins.animebroadcast;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
-import com.circularuins.animebroadcast.Data.Chat;
-import com.google.gson.Gson;
-import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.WebSocket;
-
-import org.jdeferred.AlwaysCallback;
-import org.jdeferred.DoneCallback;
-import org.jdeferred.FailCallback;
-import org.jdeferred.Promise;
-import org.jdeferred.android.AndroidDeferredManager;
-import org.jdeferred.android.DeferredAsyncTask;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import com.astuetz.PagerSlidingTabStrip;
+import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
+import com.circularuins.animebroadcast.Fragment.PageAdapter;
 
 
-public class RoomActivity extends ActionBarActivity {
+public class RoomActivity extends ActionBarActivity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    @InjectView(R.id.llParent)
-    LinearLayout llParent;
-    @InjectView(R.id.roomTitle)
-    TextView roomTitle;
-    @InjectView(R.id.editChat)
-    EditText editChat;
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    private InputMethodManager inputMethodManager;
-    private ListView listChat;
-    private ArrayAdapter<String> adapter;
-    private WebSocket ws;
-    private Gson gson;
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room);
+        setContentView(R.layout.room_activity);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        ButterKnife.inject(this);
+        // インテント経由で部屋情報を受け取る
         String roomId = getIntent().getStringExtra("room_id");
         String roomName = getIntent().getStringExtra("room_name");
-        roomTitle.setText(roomName);
-        gson = new Gson();
 
-        //キーボード表示を制御するためのオブジェクト
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //背景タップでソフトキーボードを隠す
-        llParent.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //キーボードを隠す
-                inputMethodManager.hideSoftInputFromWindow(llParent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                //背景にフォーカスを移す
-                llParent.requestFocus();
-                return false;
-            }
-        });
+        // ナビゲーションドロワー
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
-        final Button btn = (Button)findViewById(R.id.btnPost);
-        listChat = (ListView)findViewById(R.id.listChat);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        listChat.setAdapter(adapter);
-        String userId = "hoge"; //TODO 一旦決め打ち 初回起動時にユニークIDを取得するようにする
-        String wsUrl = "ws://circularuins.com:3003/chat?user=" + roomId + "/" + userId;
+        // ツールバー
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(
+                    mToolbar,
+                    R.id.navigation_drawer,
+                    (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        AsyncHttpClient.getDefaultInstance().websocket(
-                wsUrl,
-                "my-protocol",
-                new AsyncHttpClient.WebSocketConnectCallback() {
-                    @Override
-                    public void onCompleted(Exception ex, WebSocket webSocket) {
-                        if(ex != null) {
-                            ex.printStackTrace();
-                            return;
-                        }
-                        ws = webSocket;
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String postChat = editChat.getText().toString();
+        }
 
-                                if(postChat.length()!= 0) {
-                                    ws.send(postChat);
-                                    ws.setStringCallback(new WebSocket.StringCallback() {
-                                        @Override
-                                        public void onStringAvailable(final String recieveChat) {
-                                            new AndroidDeferredManager().when(new DeferredAsyncTask<Void, Object, Object>() {
-                                                @Override
-                                                protected Object doInBackgroundSafe(Void... voids) throws Exception {
-                                                    return null;
-                                                }
-                                            }).done(new DoneCallback<Object>() {
-                                                @Override
-                                                public void onDone(Object result) {
-                                                    Chat chat = gson.fromJson(recieveChat, Chat.class);
-                                                    if(chat.getChatText() != null) {
-                                                        adapter.add(chat.getChatText());
-                                                    } else {
-                                                        adapter.add(chat.getReturnMessage());
-                                                    }
-                                                    adapter.notifyDataSetChanged();
-                                                    editChat.getEditableText().clear();
-                                                }
-                                            }).fail(new FailCallback<Throwable>() {
-                                                @Override
-                                                public void onFail(Throwable result) {
+        // ビューページャー
+        FragmentManager manager = getSupportFragmentManager();
+        final ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
+        final PageAdapter adapter = new PageAdapter(manager, roomId, roomName);
+        viewPager.setAdapter(adapter);
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(viewPager);
 
-                                                }
-                                            }).always(new AlwaysCallback<Object, Throwable>() {
-                                                @Override
-                                                public void onAlways(Promise.State state, Object resolved, Throwable rejected) {
 
-                                                }
-                                            });
-                                        }
-                                    });
-
-                                    inputMethodManager.hideSoftInputFromWindow(llParent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                                    //背景にフォーカスを移す
-                                    llParent.requestFocus();
-                                }
-                            }
-                        });
-                    }
-                });
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //切断コードを送信して、ルームから退出する
-        if(ws != null) {
-            ws.send("h8ze@91bmkfp3");
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
         }
     }
 
+    public void restoreActionBar() {
+
+        mToolbar.setTitle(mTitle);
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_room, menu);
-        return true;
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            getMenuInflater().inflate(R.menu.main, menu);
+            restoreActionBar();
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -172,4 +126,45 @@ public class RoomActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            return rootView;
+        }
+
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((RoomActivity) activity).onSectionAttached(
+                    getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
 }

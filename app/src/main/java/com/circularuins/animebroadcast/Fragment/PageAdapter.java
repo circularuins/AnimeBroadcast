@@ -6,32 +6,45 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
-    public PageAdapter(FragmentManager fm) {
+    private String roomId;
+    private String roomName;
+
+    public PageAdapter(FragmentManager fm, String roomId, String roomName) {
         super(fm);
+        this.roomId = roomId;
+        this.roomName = roomName;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch(position){
             case 0:
+                return ChatFragment.newInstance(roomId, roomName);
+            case 1:
+                return new TestFragment1();
+            case 2:
                 return new TestFragment1();
             default:
-                return new TestFragment();
+                return new TestFragment1();
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0:
-                return "TODOメモ";
+                return "チャット";
+            case 1:
+                return "過去ログ";
+            case 2:
+                return "評価";
             default:
-                return "TODOリスト";
+                return "";
         }
     }
 }

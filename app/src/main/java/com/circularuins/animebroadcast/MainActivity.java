@@ -1,10 +1,10 @@
 package com.circularuins.animebroadcast;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
-import com.circularuins.animebroadcast.Fragment.PageAdapter;
+import com.circularuins.animebroadcast.Fragment.RoomListFragment;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -53,16 +55,16 @@ public class MainActivity extends ActionBarActivity
 
         }
 
-        FragmentManager manager = getSupportFragmentManager();
+        ArrayList<Room> rooms = new ArrayList<>();
+        rooms.add(new Room("r1", "Gのレコンギスタ 最終話", 5, "111", "222", "http://circularuins.com/static/img/raku_2010.jpg"));
+        rooms.add(new Room("r2", "寄生獣 最終話", 23, "111", "222", "http://img08.shop-pro.jp/PA01036/793/product/60761767_o1.jpg?20130628160943"));
+        rooms.add(new Room("r3", "蒼穹のファフナーEXODUS 23話", 1000, "111", "222", "http://img08.shop-pro.jp/PA01036/793/product/60761767_o1.jpg?20130628160943"));
 
-        final ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
-
-        final PageAdapter adapter =
-                new PageAdapter(manager);
-        viewPager.setAdapter(adapter);
-
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setViewPager(viewPager);
+        RoomListFragment fragment = RoomListFragment.newInstance(rooms);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.listRooms, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 
     @Override
