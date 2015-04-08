@@ -29,6 +29,9 @@ import org.jdeferred.Promise;
 import org.jdeferred.android.AndroidDeferredManager;
 import org.jdeferred.android.DeferredAsyncTask;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -40,20 +43,17 @@ public class ChatFragment extends Fragment {
     private static final String ROOM_ID = "room_id";
     private static final String ROOM_NAME = "room_name";
 
-    /*@InjectView(R.id.llParent)
-    LinearLayout llParent;
-    @InjectView(R.id.roomTitle)
-    TextView roomTitle;
-    @InjectView(R.id.editChat)
-    EditText editChat;*/
-
-    private String mRoomId;
-    private String mRoomName;
-
     private InputMethodManager inputMethodManager;
     private ArrayAdapter<String> adapter;
     private WebSocket ws;
     private Gson gson;
+    private String mRoomId;
+    private String mRoomName;
+
+    @InjectView(R.id.llParent) LinearLayout llParent;
+    @InjectView(R.id.roomTitle) TextView roomTitle;
+    @InjectView(R.id.editChat) EditText editChat;
+    @InjectView(R.id.listChat) ListView listChat;
 
 
     /**
@@ -91,17 +91,14 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
-        final TextView roomTitle = (TextView)view.findViewById(R.id.roomTitle);
-        final LinearLayout llParent = (LinearLayout)view.findViewById(R.id.llParent);
-        final EditText editChat = (EditText)view.findViewById(R.id.editChat);
+        ButterKnife.inject(this, view); //フラグメントの場合はビューを渡す
         final Button btn = (Button)view.findViewById(R.id.btnPost);
-        final ListView listChat = (ListView)view.findViewById(R.id.listChat);
 
         roomTitle.setText(mRoomName);
 
+        // キーボードを初期表示しない
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        //ButterKnife.inject(getActivity());
+
         gson = new Gson();
 
         //キーボード表示を制御するためのオブジェクト
@@ -182,9 +179,12 @@ public class ChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        //切断コードを送信して、ルームから退出する
+        // 切断コードを送信して、ルームから退出する
         if(ws != null) {
             ws.send("h8ze@91bmkfp3");
         }
+
+        // 必須
+        ButterKnife.reset(this);
     }
 }
