@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 
 import com.circularuins.animebroadcast.Data.Chat;
 import com.circularuins.animebroadcast.R;
+import com.circularuins.animebroadcast.Util.HideKey;
 import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
@@ -95,6 +95,9 @@ public class ChatFragment extends Fragment {
         final TextView roomTitle = (TextView)view.findViewById(R.id.roomTitle);
         final LinearLayout llParent = (LinearLayout)view.findViewById(R.id.llParent);
         final EditText editChat = (EditText)view.findViewById(R.id.editChat);
+        final Button btn = (Button)view.findViewById(R.id.btnPost);
+        final ListView listChat = (ListView)view.findViewById(R.id.listChat);
+
         roomTitle.setText(mRoomName);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -103,20 +106,9 @@ public class ChatFragment extends Fragment {
 
         //キーボード表示を制御するためのオブジェクト
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //背景タップでソフトキーボードを隠す
-        llParent.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //キーボードを隠す
-                inputMethodManager.hideSoftInputFromWindow(llParent.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                //背景にフォーカスを移す
-                llParent.requestFocus();
-                return false;
-            }
-        });
+        //リストタッチでソフトキーボードを隠す
+        HideKey.hide(inputMethodManager, listChat);
 
-        final Button btn = (Button)view.findViewById(R.id.btnPost);
-        final ListView listChat = (ListView)view.findViewById(R.id.listChat);
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
         listChat.setAdapter(adapter);
         String userId = "hoge"; //TODO 一旦決め打ち 初回起動時にユニークIDを取得するようにする
