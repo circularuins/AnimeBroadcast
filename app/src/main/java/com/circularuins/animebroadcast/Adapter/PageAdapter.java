@@ -25,8 +25,6 @@ public class PageAdapter extends FragmentPagerAdapter {
                 return ChatFragment.newInstance(roomId, roomName);
             case 1:
                 return new TestFragment1();
-            case 2:
-                return new TestFragment1();
             default:
                 return new TestFragment1();
         }
@@ -34,7 +32,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -44,8 +42,6 @@ public class PageAdapter extends FragmentPagerAdapter {
                 return "チャット";
             case 1:
                 return "過去ログ";
-            case 2:
-                return "評価";
             default:
                 return "";
         }

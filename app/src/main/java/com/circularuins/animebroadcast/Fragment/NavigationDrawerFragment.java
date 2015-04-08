@@ -1,6 +1,7 @@
 package com.circularuins.animebroadcast.Fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.circularuins.animebroadcast.Activity.MainActivity;
 import com.circularuins.animebroadcast.R;
 
 /**
@@ -99,6 +101,17 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
+                if(position == 0) {
+                    // ONAIRページ（ホーム）に戻る
+                    if(!getActivity().getClass().equals(MainActivity.class)) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                } else if(position == 1) {
+
+                } else if(position == 2) {
+
+                }
             }
         });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
@@ -106,9 +119,9 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
+                        getString(R.string.navi_menu1),
+                        getString(R.string.navi_menu2),
+                        getString(R.string.navi_menu3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
