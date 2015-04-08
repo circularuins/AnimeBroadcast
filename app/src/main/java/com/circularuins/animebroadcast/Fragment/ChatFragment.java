@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.circularuins.animebroadcast.Data.Chat;
 import com.circularuins.animebroadcast.R;
@@ -51,7 +50,6 @@ public class ChatFragment extends Fragment {
     private String mRoomName;
 
     @InjectView(R.id.llParent) LinearLayout llParent;
-    @InjectView(R.id.roomTitle) TextView roomTitle;
     @InjectView(R.id.editChat) EditText editChat;
     @InjectView(R.id.listChat) ListView listChat;
 
@@ -93,8 +91,6 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         ButterKnife.inject(this, view); //フラグメントの場合はビューを渡す
         final Button btn = (Button)view.findViewById(R.id.btnPost);
-
-        roomTitle.setText(mRoomName);
 
         // キーボードを初期表示しない
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

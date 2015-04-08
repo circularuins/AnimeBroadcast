@@ -57,7 +57,7 @@ public class RoomActivity extends ActionBarActivity
                     mToolbar,
                     R.id.navigation_drawer_room,
                     drawerLayout);
-
+            mToolbar.setSubtitle(roomName);
         }
 
         // ビューページャー
