@@ -90,7 +90,7 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.chat_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         final TextView roomTitle = (TextView)view.findViewById(R.id.roomTitle);
         final LinearLayout llParent = (LinearLayout)view.findViewById(R.id.llParent);
@@ -187,10 +187,12 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onDestroy() {
+        super.onDestroy();
 
-
-
+        //切断コードを送信して、ルームから退出する
+        if(ws != null) {
+            ws.send("h8ze@91bmkfp3");
+        }
     }
 }

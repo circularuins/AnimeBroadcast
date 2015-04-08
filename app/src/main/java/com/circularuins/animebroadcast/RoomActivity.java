@@ -36,7 +36,7 @@ public class RoomActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.room_activity);
+        setContentView(R.layout.activity_room);
 
         // インテント経由で部屋情報を受け取る
         String roomId = getIntent().getStringExtra("room_id");
@@ -44,8 +44,9 @@ public class RoomActivity extends ActionBarActivity
 
         // ナビゲーションドロワー
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_room);
         mTitle = getTitle();
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_room);
 
         // ツールバー
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,8 +55,8 @@ public class RoomActivity extends ActionBarActivity
             // Set up the drawer.
             mNavigationDrawerFragment.setUp(
                     mToolbar,
-                    R.id.navigation_drawer,
-                    (DrawerLayout) findViewById(R.id.drawer_layout));
+                    R.id.navigation_drawer_room,
+                    drawerLayout);
 
         }
 

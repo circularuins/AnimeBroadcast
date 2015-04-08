@@ -67,7 +67,7 @@ public class RoomListFragment extends ListFragment {
 
     class RoomAdapter extends ArrayAdapter<RowModel> {
         RoomAdapter(ArrayList<RowModel> list) {
-            super(getActivity(), R.layout.room_row, list);
+            super(getActivity(), R.layout.row_room, list);
             // シングルトンのイメージローダーを取得
             imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
         }
@@ -77,7 +77,7 @@ public class RoomListFragment extends ListFragment {
 
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(R.layout.room_row, parent, false);
+                convertView = inflater.inflate(R.layout.row_room, parent, false);
             }
 
             //holderパターンを使用して高速化を狙う

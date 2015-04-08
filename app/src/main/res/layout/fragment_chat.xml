@@ -31,6 +31,7 @@
                 android:layout_marginLeft="5dp"
                 android:id="@+id/editChat"
                 android:background="@android:color/holo_blue_light"
+                android:elevation="8dp"
                 android:minLines="1"
                 android:maxLines="5"/>
 
