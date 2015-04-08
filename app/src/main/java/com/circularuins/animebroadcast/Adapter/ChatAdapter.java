@@ -1,4 +1,4 @@
-package com.circularuins.animebroadcast;
+package com.circularuins.animebroadcast.Adapter;
 
 import android.app.Activity;
 import android.view.View;

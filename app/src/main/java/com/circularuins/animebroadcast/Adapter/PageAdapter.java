@@ -1,8 +1,11 @@
-package com.circularuins.animebroadcast.Fragment;
+package com.circularuins.animebroadcast.Adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.circularuins.animebroadcast.Fragment.ChatFragment;
+import com.circularuins.animebroadcast.Fragment.TestFragment1;
 
 public class PageAdapter extends FragmentPagerAdapter {
 

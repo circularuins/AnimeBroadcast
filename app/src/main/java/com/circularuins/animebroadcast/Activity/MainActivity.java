@@ -1,4 +1,4 @@
-package com.circularuins.animebroadcast;
+package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
 import com.circularuins.animebroadcast.Fragment.RoomListFragment;
+import com.circularuins.animebroadcast.R;
 
 import java.util.ArrayList;
 

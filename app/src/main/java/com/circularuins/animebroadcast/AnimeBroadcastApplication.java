@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.circularuins.animebroadcast.Util.LruBitmapCache;
+import com.deploygate.sdk.DeployGate;
 
 /**
  * Created by natsuhikowake on 15/04/06.
@@ -33,6 +34,9 @@ public class AnimeBroadcastApplication extends Application {
         sContext = getApplicationContext();
         MY_APPLICATION = new AnimeBroadcastApplication();
         MY_APPLICATION.setRequestQueue();
+
+        // DeployGateをdebugとreleaseで使用する
+        DeployGate.install(this, null, true);
     }
 
     public Context getContext() {

@@ -1,4 +1,4 @@
-package com.circularuins.animebroadcast;
+package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
-import com.circularuins.animebroadcast.Fragment.PageAdapter;
+import com.circularuins.animebroadcast.Adapter.PageAdapter;
+import com.circularuins.animebroadcast.R;
 
 
 public class RoomActivity extends ActionBarActivity

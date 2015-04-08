@@ -15,7 +15,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.R;
-import com.circularuins.animebroadcast.RoomActivity;
+import com.circularuins.animebroadcast.Activity.RoomActivity;
 import com.circularuins.animebroadcast.Util.RoomViewHolder;
 
 import java.util.ArrayList;
