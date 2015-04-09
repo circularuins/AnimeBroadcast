@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -90,7 +90,8 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         ButterKnife.inject(this, view); //フラグメントの場合はビューを渡す
-        final Button btn = (Button)view.findViewById(R.id.btnPost);
+        final ImageButton btn = (ImageButton)view.findViewById(R.id.btnPost);
+        final ImageButton btnPhoto = (ImageButton)view.findViewById(R.id.btnPhoto);
 
         // キーボードを初期表示しない
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

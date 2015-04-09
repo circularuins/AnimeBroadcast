@@ -24,22 +24,30 @@
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnPhoto"
+                android:src="@drawable/ic_camera_alt_black_36dp"/>
+
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
                 android:id="@+id/editChat"
                 android:background="@android:color/holo_blue_light"
                 android:elevation="8dp"
                 android:minLines="1"
                 android:maxLines="5"/>
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnPost"
-                android:text="送信"/>
+                android:src="@drawable/ic_chat_black_36dp"/>
         </LinearLayout>
 
 </LinearLayout>
