@@ -1,22 +1,27 @@
 package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
-import com.circularuins.animebroadcast.Fragment.RoomListFragment;
 import com.circularuins.animebroadcast.R;
 
 import java.util.ArrayList;
@@ -59,15 +64,52 @@ public class MainActivity extends ActionBarActivity
         }
 
         ArrayList<Room> rooms = new ArrayList<>();
-        rooms.add(new Room("r1", "Gのレコンギスタ 最終話", 5, "111", "222", "http://circularuins.com/static/img/raku_2010.jpg"));
-        rooms.add(new Room("r2", "寄生獣 最終話", 23, "111", "222", "http://img08.shop-pro.jp/PA01036/793/product/60761767_o1.jpg?20130628160943"));
-        rooms.add(new Room("r3", "蒼穹のファフナーEXODUS 23話", 1000, "111", "222", "http://img08.shop-pro.jp/PA01036/793/product/60761767_o1.jpg?20130628160943"));
+        rooms.add(new Room("r1", "Gのレコンギスタ 最終話", 5, "2015/04/03 01:35", "2015/04/03 01:35", "http://blog-imgs-74.fc2.com/s/a/b/sabusoku/gre_20150216080420ab8.jpg"));
+        rooms.add(new Room("r2", "寄生獣 最終話", 23, "2015/04/03 01:35", "2015/04/03 01:35", "http://feelgoodokinawa1945.com/wp-content/uploads/2014/03/9fafd31a7971f7cdea200133a182f9de.jpg"));
+        rooms.add(new Room("r3", "蒼穹のファフナーEXODUS 23話", 1000, "2015/04/03 01:35", "2015/04/03 01:35", "http://img.youtube.com/vi/e9X36_ELxWE/sddefault.jpg"));
+        rooms.add(new Room("r4", "スペース☆ダンディ 23話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://livedoor.4.blogimg.jp/nizigami/imgs/a/4/a4927cb1.jpg"));
+        rooms.add(new Room("r5", "魔法少女まどか☆マギカ 10話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://blog-imgs-62.fc2.com/n/o/s/nosweetwithoutsweat/kyoko.jpg"));
+        rooms.add(new Room("r6", "攻殻機動隊 99話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://image.eiga.k-img.com/images/movie/55879/original.jpg?1396890531"));
 
-        RoomListFragment fragment = RoomListFragment.newInstance(rooms);
+        /*RoomListFragment fragment = RoomListFragment.newInstance(rooms);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.listRooms, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
+        ft.commit();*/
+        LinearLayout llCardRoom = (LinearLayout)this.findViewById(R.id.cardLinearRoom);
+        llCardRoom.removeAllViews();
+        // シングルトンのイメージローダーを取得
+        ImageLoader imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
+        int i = 0;
+        for(final Room room : rooms) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.card_room, null);
+            CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
+            ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
+            TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
+            TextView cardDate = (TextView) linearLayout.findViewById(R.id.cardDate);
+            cardName.setText(room.getRoomName());
+            cardDate.setText(room.getUpdatedOn());
+            // リクエストのキャンセル処理
+            ImageLoader.ImageContainer imageContainer = (ImageLoader.ImageContainer)cardImg.getTag();
+            if (imageContainer != null) {
+                imageContainer.cancelRequest();
+            }
+            ImageLoader.ImageListener listener = ImageLoader.getImageListener(cardImg, R.drawable.munoji, R.drawable.kiseki_delete);
+            cardImg.setTag(imageLoader.get(room.getImageUrl(), listener));
+            cardView.setTag(i);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, RoomActivity.class);
+                    intent.putExtra("room_id", room.getRoomId());
+                    intent.putExtra("room_name", room.getRoomName());
+                    startActivity(intent);
+                }
+            });
+            llCardRoom.addView(linearLayout, i);
+            i++;
+        }
     }
 
     @Override
