@@ -11,14 +11,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
+        android:background="?attr/colorPrimaryDark"
+        android:popupTheme="@style/Theme.AppCompat.Light"
         android:minHeight="?attr/actionBarSize"/>
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"/>
+        android:layout_height="30dp"
+        android:background="?attr/colorPrimary"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout_room"

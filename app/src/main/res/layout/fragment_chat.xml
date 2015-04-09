@@ -32,13 +32,13 @@
 
             <EditText
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:layout_weight="4"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/editChat"
-                android:background="@android:color/holo_blue_light"
+                android:background="@color/cyan500"
                 android:elevation="8dp"
                 android:minLines="1"
                 android:maxLines="5"/>
