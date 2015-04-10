@@ -89,8 +89,10 @@ public class MainActivity extends ActionBarActivity
             CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
             ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
             TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
+            TextView cardPost = (TextView) linearLayout.findViewById(R.id.cardPost);
             TextView cardDate = (TextView) linearLayout.findViewById(R.id.cardDate);
             cardName.setText(room.getRoomName());
+            cardPost.setText(room.getCountPosts() + "投稿");
             cardDate.setText(room.getUpdatedOn());
             // リクエストのキャンセル処理
             ImageLoader.ImageContainer imageContainer = (ImageLoader.ImageContainer)cardImg.getTag();

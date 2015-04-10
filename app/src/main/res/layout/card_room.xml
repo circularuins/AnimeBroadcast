@@ -27,7 +27,7 @@
             android:orientation="vertical"
             android:id="@+id/llCardView">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -39,25 +39,33 @@
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
+                    android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
                     pew:reverse="reverseX"
                     android:src="@drawable/munoji"
                     android:id="@+id/cardImg" />
 
-                <com.fmsirvent.ParallaxEverywhere.PEWTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#88FF0000"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:id="@+id/cardPost" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:gravity="bottom|center_horizontal"
-                    android:text="hogehoge"
-                    android:textColor="@color/cyan600"
-                    android:textSize="30sp"
-                    android:id="@+id/cardName"
-                    pew:block_parallax_x="true"
-                    pew:parallax_x="160dp"
-                    pew:parallax_y="160dp"
-                    pew:reverse="reverseX" />
-            </FrameLayout>
+                    android:background="#77000000"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:id="@+id/cardName" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
