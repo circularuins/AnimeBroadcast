@@ -111,7 +111,7 @@ public class MainActivity extends ActionBarActivity
                         startActivity(intent);
                     } else {
                         startActivity(intent,
-                                ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, null).toBundle());
+                                ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
                     }
                 }
             });

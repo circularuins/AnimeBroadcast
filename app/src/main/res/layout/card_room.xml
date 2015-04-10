@@ -20,40 +20,44 @@
         <!-- カードに載せる情報 -->
 
         <LinearLayout
+            xmlns:pew="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:id="@+id/llCardView">
 
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="CardView"
-                android:id="@+id/textBox"
-                android:textSize="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="17dp"
-                android:layout_marginStart="17dp" />-->
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/munoji"
-                android:id="@+id/cardImg" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:id="@+id/cardName"
-                android:text="name"
-                android:textColor="@color/black"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <com.fmsirvent.ParallaxEverywhere.PEWImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:scaleType="centerCrop"
+                    pew:reverse="reverseX"
+                    android:src="@drawable/munoji"
+                    android:id="@+id/cardImg" />
+
+                <com.fmsirvent.ParallaxEverywhere.PEWTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:text="hogehoge"
+                    android:textColor="@color/cyan600"
+                    android:textSize="30sp"
+                    android:id="@+id/cardName"
+                    pew:block_parallax_x="true"
+                    pew:parallax_x="160dp"
+                    pew:parallax_y="160dp"
+                    pew:reverse="reverseX" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
