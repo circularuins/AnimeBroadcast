@@ -1,7 +1,9 @@
 package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -104,7 +106,13 @@ public class MainActivity extends ActionBarActivity
                     Intent intent = new Intent(MainActivity.this, RoomActivity.class);
                     intent.putExtra("room_id", room.getRoomId());
                     intent.putExtra("room_name", room.getRoomName());
-                    startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    if(Build.VERSION.SDK_INT < 21) {
+                        startActivity(intent);
+                    } else {
+                        startActivity(intent,
+                                ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, null).toBundle());
+                    }
                 }
             });
             llCardRoom.addView(linearLayout, i);
