@@ -9,4 +9,8 @@
     <color name="cyan500">#00BCD4</color>
     <color name="cyan600">#00ACC1</color>
     <color name="indigo50">#E8EAF6</color>
+    <color name="red500">#F44336</color>
+    <color name="blue500">#2196F3</color>
+    <color name="green500">#4CAF50</color>
+    <color name="yellow500">#FFEB3B</color>
 </resources>

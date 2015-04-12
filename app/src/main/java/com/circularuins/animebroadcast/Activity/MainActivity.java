@@ -5,9 +5,11 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +39,7 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -78,6 +81,21 @@ public class MainActivity extends ActionBarActivity
         ft.replace(R.id.listRooms, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();*/
+
+        // 引っ張って更新処理のUI
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_rooms);
+        // 色指定
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.red500,R.color.blue500,R.color.green500, R.color.yellow500);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.cyan600);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // このアプリでは更新処理のダミーとして1秒後に更新終了処理を呼び出している
+                mHandler.removeCallbacks(mRefreshDone);
+                mHandler.postDelayed(mRefreshDone, 1000); // 3000にすると3秒間プログレスが表示されるよ
+            }
+        });
+
         LinearLayout llCardRoom = (LinearLayout)this.findViewById(R.id.cardLinearRoom);
         llCardRoom.removeAllViews();
         // シングルトンのイメージローダーを取得
@@ -218,5 +236,16 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    private Handler mHandler = new Handler();
+    private final Runnable mRefreshDone = new Runnable() {
+
+        @Override
+        public void run() {
+            // 3. プログレスを終了させる
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+    };
 
 }
