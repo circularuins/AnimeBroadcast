@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity
         // 引っ張って更新処理のUI
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_rooms);
         // 色指定
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.red500,R.color.blue500,R.color.green500, R.color.yellow500);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.white);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.cyan600);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

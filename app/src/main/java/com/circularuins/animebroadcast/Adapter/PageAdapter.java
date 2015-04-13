@@ -22,28 +22,30 @@ public class PageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return ChatFragment.newInstance(roomId, roomName);
-            case 1:
                 return new TestFragment1();
-            default:
+            case 1:
+                return ChatFragment.newInstance(roomId, roomName);
+            case 2:
                 return new TestFragment1();
         }
+        return null;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0:
-                return "チャット";
+                return "詳細";
             case 1:
+                return "チャット";
+            case 2:
                 return "過去ログ";
-            default:
-                return "";
         }
+        return null;
     }
 }

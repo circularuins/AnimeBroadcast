@@ -1,22 +1,31 @@
 package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
-import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
 import com.circularuins.animebroadcast.Adapter.PageAdapter;
+import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
 import com.circularuins.animebroadcast.R;
 
 
@@ -33,6 +42,8 @@ public class RoomActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private Toolbar mToolbar;
+    private TabWidget tabWidget;
+    private View mIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +73,107 @@ public class RoomActivity extends ActionBarActivity
         }
 
         // ビューページャー
-        FragmentManager manager = getSupportFragmentManager();
-        final ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
-        final PageAdapter adapter = new PageAdapter(manager, roomId, roomName);
-        viewPager.setAdapter(adapter);
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setViewPager(viewPager);
+        final ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        final TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        tabWidget = (TabWidget) findViewById(android.R.id.tabs);
+        mIndicator = findViewById(R.id.indicator);
 
+        /** タブ関連 */
+        // ViewPagerのセットアップ
+        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager(), roomId, roomName);
+        pager.setAdapter(adapter);
+        // タブの設定
+        tabHost.setup();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        // タブの構築
+        for (int i=0; i<adapter.getCount(); i++) {
+            TextView tv = (TextView) inflater.inflate(R.layout.tab_widget, tabWidget, false);
+            tv.setText( adapter.getPageTitle(i) );
+            tabHost.addTab( tabHost
+                    .newTabSpec( String.valueOf(i) )
+                    .setIndicator( tv )
+                    .setContent( android.R.id.tabcontent ));
+        }
 
+        // リスナー。タブのスクロールとインジケーターのスクロールで呼ばれる。
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                // タブのタッチでページ移動とスクロール移動に繋がる
+                pager.setCurrentItem(Integer.valueOf(tabId));
+            }
+        });
+        pager.setOnPageChangeListener(new PageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // この記述が無いと、
+                // スライドでページ移動後にタブタッチで移動ができなかったり、
+                // ２つ隣のページに一気に飛べなかったりする。
+                tabHost.setCurrentTab(position);
+            }
+        });
+        pager.setCurrentItem(1, false); //チャットページを初期表示
+        //ページ切り替え後すぐにページのスクロールをキャンセルする
+        pager.dispatchTouchEvent(MotionEvent.obtain
+                (SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_CANCEL, 0, 0, 0));
+
+        // タブウィジェット
+        // タブの区切り線を消す
+        tabWidget.setStripEnabled(false);
+        tabWidget.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
+        // タブの下に影を作る（この方法だと21以降でないと反映されない）
+        if(Build.VERSION.SDK_INT >= 21) {
+            float elevation = 4 * getResources().getDisplayMetrics().density;
+            tabHost.setElevation(elevation);
+        }
+    }
+
+    // スクロールできるタブ関連
+    private class PageChangeListener implements ViewPager.OnPageChangeListener {
+        private int mScrollingState = ViewPager.SCROLL_STATE_IDLE;
+        @Override	// ページが移動したら呼ばれる
+        public void onPageSelected(int position) {
+            Log.v("testMA", "PageChangeListener / onPageSelected");
+            // スクロール中はonPageScrolled()で描画するのでここではしない
+            if (mScrollingState == ViewPager.SCROLL_STATE_IDLE) {
+                updateIndicatorPosition(position, 0);
+            }
+            // ページのスクロールでウィジェットの動作（色変更など）に対応させる
+            tabWidget.setCurrentTab(position);
+        }
+        @Override	// スクロールで呼ばれる
+        public void onPageScrollStateChanged(int state) {
+            Log.v("testMA", "PageChangeListener / onPageScrollStateChanged");
+            // ？　無くても動く
+            //mScrollingState = state;
+        }
+        @Override	// スクロールしたら呼ばれる
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.v("testMA", "PageChangeListener / onPageScrolled");
+            updateIndicatorPosition(position, positionOffset);
+        }
+        // インジケーターの動き設定
+        private void updateIndicatorPosition(int position, float positionOffset) {
+            Log.v("testMA", "PageChangeListener / updateIndicatorPosition");
+            // 現在の位置のタブのView
+            View tabView = tabWidget.getChildAt(position);
+            // 現在の位置の次のタブの横幅
+            //int width2 = view2 == null ? width : view2.getWidth();
+            // インディケータの幅（現在位置のタブ幅）
+            int indicatorWidth = tabView.getWidth();
+            // インディケータの左端の位置
+            int indicatorLeft = (int) ((position + positionOffset) * indicatorWidth);
+            // インディケータの幅と左端の位置をセット
+            final FrameLayout.LayoutParams layoutParams =
+                    (FrameLayout.LayoutParams) mIndicator.getLayoutParams();
+            layoutParams.width = indicatorWidth;
+            layoutParams.setMargins(indicatorLeft, 0, 0, 0);
+            mIndicator.setLayoutParams(layoutParams);
+
+            // インディケータが画面に入る様に、タブの領域をスクロール
+            //mTrackScroller.scrollTo(indicatorLeft - mIndicatorOffset, 0);
+        }
     }
 
     @Override
