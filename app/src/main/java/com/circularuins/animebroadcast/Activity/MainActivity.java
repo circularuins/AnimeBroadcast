@@ -104,11 +104,13 @@ public class MainActivity extends ActionBarActivity
         for(final Room room : rooms) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.card_room, null);
+
             CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
             ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
             TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
             TextView cardPost = (TextView) linearLayout.findViewById(R.id.cardPost);
             TextView cardDate = (TextView) linearLayout.findViewById(R.id.cardDate);
+
             cardName.setText(room.getRoomName());
             cardPost.setText(room.getCountPosts() + "投稿");
             cardDate.setText(room.getUpdatedOn());
@@ -135,6 +137,7 @@ public class MainActivity extends ActionBarActivity
                     }
                 }
             });
+
             llCardRoom.addView(linearLayout, i);
             i++;
         }
