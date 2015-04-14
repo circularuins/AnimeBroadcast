@@ -8,25 +8,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Chat;
 import com.circularuins.animebroadcast.R;
 import com.circularuins.animebroadcast.Util.HideKey;
+import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.jdeferred.AlwaysCallback;
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 import org.jdeferred.android.AndroidDeferredManager;
 import org.jdeferred.android.DeferredAsyncTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,11 +51,14 @@ public class ChatFragment extends Fragment {
     private static final String ROOM_NAME = "room_name";
 
     private InputMethodManager inputMethodManager;
-    private ArrayAdapter<String> adapter;
+    private List<Chat> chats = new ArrayList<>();
+    private ChatItemAdapter adapter;
+    private String userId;
     private WebSocket ws;
     private Gson gson;
     private String mRoomId;
     private String mRoomName;
+    private ImageLoader imageLoader;
 
     @InjectView(R.id.llParent) LinearLayout llParent;
     @InjectView(R.id.editChat) EditText editChat;
@@ -98,14 +109,17 @@ public class ChatFragment extends Fragment {
 
         gson = new Gson();
 
+        userId = RandomStringUtils.randomAlphanumeric(6); //TODO 一旦ランダム 初回起動時にユニークIDを取得するようにする
+        // シングルトンのイメージローダーを取得
+        imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
+
         //キーボード表示を制御するためのオブジェクト
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         //リストタッチでソフトキーボードを隠す
         HideKey.hide(inputMethodManager, listChat);
 
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        adapter = new ChatItemAdapter();
         listChat.setAdapter(adapter);
-        String userId = "hoge"; //TODO 一旦決め打ち 初回起動時にユニークIDを取得するようにする
         String wsUrl = "ws://circularuins.com:3003/chat?user=" + mRoomId + "/" + userId;
 
         AsyncHttpClient.getDefaultInstance().websocket(
@@ -138,12 +152,9 @@ public class ChatFragment extends Fragment {
                                                 @Override
                                                 public void onDone(Object result) {
                                                     Chat chat = gson.fromJson(recieveChat, Chat.class);
-                                                    if(chat.getChatText() != null) {
-                                                        adapter.add(chat.getChatText());
-                                                    } else {
-                                                        adapter.add(chat.getReturnMessage());
-                                                    }
+                                                    chats.add(chat);
                                                     adapter.notifyDataSetChanged();
+                                                    listChat.smoothScrollToPosition(adapter.getCount());
                                                     editChat.getEditableText().clear();
                                                 }
                                             }).fail(new FailCallback<Throwable>() {
@@ -183,5 +194,83 @@ public class ChatFragment extends Fragment {
 
         // 必須
         ButterKnife.reset(this);
+    }
+
+    private class ChatItemAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return chats.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return chats.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            TextView chatId;
+            TextView chatText;
+            TextView chatDate;
+            TextView chatMsg;
+            PEWImageView chatImg;
+            TextView chatImgDate;
+            View v = convertView;
+            Chat chat = (Chat)getItem(position);
+
+            //if(v==null){
+                LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                if(chat.getChatText() != null) {
+                    if(chat.getUserId().equals(userId)) {
+                        v = inflater.inflate(R.layout.chat_item1, null);
+
+                        chatId = (TextView) v.findViewById(R.id.chatID1);
+                        chatText = (TextView) v.findViewById(R.id.chatText1);
+                        chatDate = (TextView) v.findViewById(R.id.chatDate1);
+
+                        chatId.setText("ID : " + chat.getUserId());
+                        chatText.setText(chat.getChatText());
+                        chatDate.setText(chat.getPostTime());
+                    } else {
+                        v = inflater.inflate(R.layout.chat_item2, null);
+
+                        chatId = (TextView) v.findViewById(R.id.chatID2);
+                        chatText = (TextView) v.findViewById(R.id.chatText2);
+                        chatDate = (TextView) v.findViewById(R.id.chatDate2);
+
+                        chatId.setText("ID : " + chat.getUserId());
+                        chatText.setText(chat.getChatText());
+                        chatDate.setText(chat.getPostTime());
+                    }
+                } else if(chat.getReturnMessage() != null) {
+                    v = inflater.inflate(R.layout.chat_message, null);
+
+                    chatMsg = (TextView) v.findViewById(R.id.chatMessage);
+                    chatMsg.setText(chat.getReturnMessage());
+                } else if(chat.getImageUrl() != null) {
+                    v = inflater.inflate(R.layout.chat_image, null);
+
+                    chatImg  = (PEWImageView)v.findViewById(R.id.chatImg);
+                    ImageLoader.ImageContainer imageContainer = (ImageLoader.ImageContainer)chatImg.getTag();
+                    if (imageContainer != null) {
+                        imageContainer.cancelRequest();
+                    }
+                    ImageLoader.ImageListener listener = ImageLoader.getImageListener(chatImg, R.drawable.munoji, R.drawable.kiseki_delete);
+                    chatImg.setTag(imageLoader.get(chat.getImageUrl(), listener));
+
+                    chatImgDate = (TextView)v.findViewById(R.id.chatImgDate);
+                    chatImgDate.setText(chat.getPostTime());
+                }
+            //}
+            return v;
+        }
+
     }
 }

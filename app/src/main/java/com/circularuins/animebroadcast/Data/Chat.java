@@ -19,6 +19,9 @@ public class Chat {
     @SerializedName("message")
     private String returnMessage;
 
+    @SerializedName("image_url")
+    private String imageUrl;
+
     public String getUserId() {
         return userId;
     }
@@ -49,5 +52,13 @@ public class Chat {
 
     public void setReturnMessage(String returnMessage) {
         this.returnMessage = returnMessage;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
