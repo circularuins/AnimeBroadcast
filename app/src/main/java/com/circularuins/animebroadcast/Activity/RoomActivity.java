@@ -1,6 +1,7 @@
 package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -27,6 +28,14 @@ import android.widget.TextView;
 import com.circularuins.animebroadcast.Adapter.PageAdapter;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
 import com.circularuins.animebroadcast.R;
+import com.circularuins.animebroadcast.Util.ImageFromNet;
+
+import org.jdeferred.AlwaysCallback;
+import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
+import org.jdeferred.Promise;
+import org.jdeferred.android.AndroidDeferredManager;
+import org.jdeferred.android.DeferredAsyncTask;
 
 
 public class RoomActivity extends ActionBarActivity
@@ -44,6 +53,7 @@ public class RoomActivity extends ActionBarActivity
     private Toolbar mToolbar;
     private TabWidget tabWidget;
     private View mIndicator;
+    private Drawable img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,7 @@ public class RoomActivity extends ActionBarActivity
         // インテント経由で部屋情報を受け取る
         String roomId = getIntent().getStringExtra("room_id");
         String roomName = getIntent().getStringExtra("room_name");
+        final String roomUrl = getIntent().getStringExtra("room_url");
 
         // ナビゲーションドロワー
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -70,6 +81,27 @@ public class RoomActivity extends ActionBarActivity
                     R.id.navigation_drawer_room,
                     drawerLayout);
             mToolbar.setSubtitle(roomName);
+            // ツールバーの背景に画像を読み込む
+            new AndroidDeferredManager().when(new DeferredAsyncTask<Void, Object, Object>() {
+                @Override
+                protected Object doInBackgroundSafe(Void... voids) throws Exception {
+                    img = ImageFromNet.createDrawable(roomUrl);
+                    return null;
+                }
+            }).done(new DoneCallback<Object>() {
+                @Override
+                public void onDone(Object result) {
+                    mToolbar.setBackground(img);
+                }
+            }).fail(new FailCallback<Throwable>() {
+                @Override
+                public void onFail(Throwable result) {
+                }
+            }).always(new AlwaysCallback<Object, Throwable>() {
+                @Override
+                public void onAlways(Promise.State state, Object resolved, Throwable rejected) {
+                }
+            });
         }
 
         // ビューページャー

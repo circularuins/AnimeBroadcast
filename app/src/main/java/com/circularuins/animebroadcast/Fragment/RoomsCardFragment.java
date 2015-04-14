@@ -112,6 +112,7 @@ public class RoomsCardFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), RoomActivity.class);
                     intent.putExtra("room_id", room.getRoomId());
                     intent.putExtra("room_name", room.getRoomName());
+                    intent.putExtra("room_url", room.getImageUrl());
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     if (Build.VERSION.SDK_INT < 21) {
                         startActivity(intent);
