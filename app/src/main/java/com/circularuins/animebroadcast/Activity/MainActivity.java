@@ -1,31 +1,21 @@
 package com.circularuins.animebroadcast.Activity;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.Fragment.NavigationDrawerFragment;
+import com.circularuins.animebroadcast.Fragment.RoomsCardFragment;
 import com.circularuins.animebroadcast.R;
 
 import java.util.ArrayList;
@@ -39,7 +29,6 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -52,11 +41,13 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // ナビゲーションドロワーの設定
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer_main);
         mTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
 
+        // ツールバーとナビゲーションドロワーを連動させる
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -65,7 +56,6 @@ public class MainActivity extends ActionBarActivity
                     mToolbar,
                     R.id.navigation_drawer_main,
                     mDrawerLayout);
-
         }
 
         ArrayList<Room> rooms = new ArrayList<>();
@@ -76,70 +66,12 @@ public class MainActivity extends ActionBarActivity
         rooms.add(new Room("r5", "魔法少女まどか☆マギカ 10話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://blog-imgs-62.fc2.com/n/o/s/nosweetwithoutsweat/kyoko.jpg"));
         rooms.add(new Room("r6", "攻殻機動隊 99話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://image.eiga.k-img.com/images/movie/55879/original.jpg?1396890531"));
 
-        /*RoomListFragment fragment = RoomListFragment.newInstance(rooms);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.listRooms, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();*/
-
-        // 引っ張って更新処理のUI
-        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_rooms);
-        // 色指定
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.white);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.cyan600);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // このアプリでは更新処理のダミーとして1秒後に更新終了処理を呼び出している
-                mHandler.removeCallbacks(mRefreshDone);
-                mHandler.postDelayed(mRefreshDone, 1000); // 3000にすると3秒間プログレスが表示されるよ
-            }
-        });
-
-        LinearLayout llCardRoom = (LinearLayout)this.findViewById(R.id.cardLinearRoom);
-        llCardRoom.removeAllViews();
-        // シングルトンのイメージローダーを取得
-        ImageLoader imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
-        int i = 0;
-        for(final Room room : rooms) {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.card_room, null);
-
-            CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
-            ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
-            TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
-            TextView cardPost = (TextView) linearLayout.findViewById(R.id.cardPost);
-            TextView cardDate = (TextView) linearLayout.findViewById(R.id.cardDate);
-
-            cardName.setText(room.getRoomName());
-            cardPost.setText(room.getCountPosts() + "投稿");
-            cardDate.setText(room.getUpdatedOn());
-            // リクエストのキャンセル処理
-            ImageLoader.ImageContainer imageContainer = (ImageLoader.ImageContainer)cardImg.getTag();
-            if (imageContainer != null) {
-                imageContainer.cancelRequest();
-            }
-            ImageLoader.ImageListener listener = ImageLoader.getImageListener(cardImg, R.drawable.munoji, R.drawable.kiseki_delete);
-            cardImg.setTag(imageLoader.get(room.getImageUrl(), listener));
-            cardView.setTag(i);
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, RoomActivity.class);
-                    intent.putExtra("room_id", room.getRoomId());
-                    intent.putExtra("room_name", room.getRoomName());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    if(Build.VERSION.SDK_INT < 21) {
-                        startActivity(intent);
-                    } else {
-                        startActivity(intent,
-                                ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
-                    }
-                }
-            });
-
-            llCardRoom.addView(linearLayout, i);
-            i++;
+        // 部屋一覧のcardviewをセットする
+        // RoomsCardFragmentのファクトリーメソッドに、表示させる部屋データを渡す
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.cardRooms, RoomsCardFragment.newInstance(rooms))
+                    .commit();
         }
     }
 
@@ -240,15 +172,6 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private Handler mHandler = new Handler();
-    private final Runnable mRefreshDone = new Runnable() {
 
-        @Override
-        public void run() {
-            // 3. プログレスを終了させる
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
-    };
 
 }

@@ -105,7 +105,6 @@ public class NavigationDrawerFragment extends Fragment {
                     // ONAIRページ（ホーム）に戻る
                     if(!getActivity().getClass().equals(MainActivity.class)) {
                         Intent intent = new Intent(getActivity(), MainActivity.class);
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }

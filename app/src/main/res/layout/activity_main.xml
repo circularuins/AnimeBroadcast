@@ -28,26 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/swipe_refresh_rooms"
+            <FrameLayout
+                android:id="@+id/cardRooms"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/scrollViewRoom"
-                    android:fillViewport="false">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/cardLinearRoom">
-                    </LinearLayout>
-                </ScrollView>
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </FrameLayout>
         </FrameLayout>
 
         <!-- android:layout_gravity="start" tells DrawerLayout to treat
