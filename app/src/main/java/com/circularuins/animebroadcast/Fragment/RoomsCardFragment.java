@@ -91,7 +91,7 @@ public class RoomsCardFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_rooms);
         // 色指定
         mSwipeRefreshLayout.setColorSchemeResources(R.color.white);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.cyan600);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.grey800);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -112,7 +112,7 @@ public class RoomsCardFragment extends Fragment {
         for(final Room room : rooms) {
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.card_room, null);
             final CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
-            ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
+            final ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
             TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
             TextView cardPost = (TextView) linearLayout.findViewById(R.id.cardPost);
             TextView cardDate = (TextView) linearLayout.findViewById(R.id.cardDate);
@@ -156,7 +156,9 @@ public class RoomsCardFragment extends Fragment {
                                                     startActivity(intent);
                                                 } else {
                                                     startActivity(intent,
-                                                            ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                                                            ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                                                                    cardImg,
+                                                                    getString(R.string.transition_main_and_room)).toBundle());
                                                 }
                                             }
                                         });

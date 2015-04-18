@@ -41,6 +41,7 @@
                     android:paddingTop="5dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
+                    android:transitionName="@string/transition_main_and_room"
                     pew:reverse="reverseX"
                     android:src="@drawable/munoji"
                     android:id="@+id/cardImg" />
