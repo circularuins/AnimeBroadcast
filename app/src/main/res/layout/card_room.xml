@@ -48,6 +48,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#88FF0000"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:text="0人"
+                    android:gravity="top"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#88FF0000"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:textColor="@color/white"

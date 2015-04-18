@@ -13,13 +13,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.circularuins.animebroadcast.Activity.RoomActivity;
 import com.circularuins.animebroadcast.AnimeBroadcastApplication;
+import com.circularuins.animebroadcast.Data.Population;
+import com.circularuins.animebroadcast.Data.PopulationList;
 import com.circularuins.animebroadcast.Data.Room;
 import com.circularuins.animebroadcast.R;
+import com.google.gson.Gson;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
+
+import org.jdeferred.AlwaysCallback;
+import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
+import org.jdeferred.Promise;
+import org.jdeferred.android.AndroidDeferredManager;
+import org.jdeferred.android.DeferredAsyncTask;
 
 import java.util.ArrayList;
 
@@ -29,6 +42,9 @@ import java.util.ArrayList;
 public class RoomsCardFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private WebSocket ws;
+    private Gson gson;
+    private LinearLayout llCardRoom;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,7 +98,7 @@ public class RoomsCardFragment extends Fragment {
 
         ArrayList<Room> rooms = getArguments().getParcelableArrayList("rooms");
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
-        LinearLayout llCardRoom = (LinearLayout)view.findViewById(R.id.cardLinearRoom);
+        llCardRoom = (LinearLayout)view.findViewById(R.id.cardLinearRoom);
         llCardRoom.removeAllViews();
         // シングルトンのイメージローダーを取得
         ImageLoader imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
@@ -122,9 +138,79 @@ public class RoomsCardFragment extends Fragment {
                     }
                 }
             });
+            linearLayout.setTag(R.string.card_view_tag1, room.getRoomId());
             llCardRoom.addView(linearLayout, i);
             i++;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // WebSocketで、各チャットルームの入室人数を取得する
+        gson = new Gson();
+        String wsUrl = "ws://circularuins.com:3003/stream";
+        AsyncHttpClient.getDefaultInstance().websocket(
+                wsUrl,
+                "my-protocol",
+                new AsyncHttpClient.WebSocketConnectCallback() {
+                    @Override
+                    public void onCompleted(Exception ex, WebSocket webSocket) {
+                        if(ex != null) {
+                            ex.printStackTrace();
+                            return;
+                        }
+                        ws = webSocket;
+                        ws.setStringCallback(new WebSocket.StringCallback() {
+                            @Override
+                            public void onStringAvailable(final String recievePopulation) {
+                                new AndroidDeferredManager().when(new DeferredAsyncTask<Void, Object, Object>() {
+                                    @Override
+                                    protected Object doInBackgroundSafe(Void... voids) throws Exception {
+                                        return null;
+                                    }
+                                }).done(new DoneCallback<Object>() {
+                                    @Override
+                                    public void onDone(Object result) {
+                                        PopulationList populationList = gson.fromJson(recievePopulation, PopulationList.class);
+                                        for(int i = 0; i < llCardRoom.getChildCount(); i++) {
+                                            LinearLayout ll = (LinearLayout)llCardRoom.getChildAt(i);
+                                            CardView c = (CardView)ll.getChildAt(0);
+                                            LinearLayout l = (LinearLayout)c.getChildAt(0);
+                                            RelativeLayout r = (RelativeLayout)l.getChildAt(0);
+                                            TextView t = (TextView)r.getChildAt(1);
+                                            t.setText("0人");
+                                        }
+                                        for(int i = 0; i < llCardRoom.getChildCount(); i++) {
+                                            LinearLayout ll = (LinearLayout)llCardRoom.getChildAt(i);
+                                            for(Population p : populationList.getPopulations()) {
+                                                if(p.getRoomId().equals(ll.getTag(R.string.card_view_tag1))) {
+                                                    CardView c = (CardView)ll.getChildAt(0);
+                                                    LinearLayout l = (LinearLayout)c.getChildAt(0);
+                                                    RelativeLayout r = (RelativeLayout)l.getChildAt(0);
+                                                    TextView t = (TextView)r.getChildAt(1);
+                                                    t.setText(p.getPopulation() + "人");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).fail(new FailCallback<Throwable>() {
+                                    @Override
+                                    public void onFail(Throwable result) {
+
+                                    }
+                                }).always(new AlwaysCallback<Object, Throwable>() {
+                                    @Override
+                                    public void onAlways(Promise.State state, Object resolved, Throwable rejected) {
+
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                });
     }
 
     private Handler mHandler = new Handler();
