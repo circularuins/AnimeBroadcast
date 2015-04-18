@@ -36,4 +36,5 @@ dependencies {
     compile 'com.android.support:support-v13:22.+'
     compile 'com.android.support:support-v4:22.+'
     compile 'commons-lang:commons-lang:+'
+    compile 'com.android.support:palette-v7:21.0.0'
 }

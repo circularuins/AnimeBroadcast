@@ -64,6 +64,7 @@ public class RoomActivity extends ActionBarActivity
         String roomId = getIntent().getStringExtra("room_id");
         String roomName = getIntent().getStringExtra("room_name");
         final String roomUrl = getIntent().getStringExtra("room_url");
+        int roomColor = getIntent().getIntExtra("room_color", R.color.white);
 
         // ナビゲーションドロワー
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -107,12 +108,14 @@ public class RoomActivity extends ActionBarActivity
         // ビューページャー
         final ViewPager pager = (ViewPager) findViewById(R.id.pager);
         final TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        pager.setBackgroundColor(roomColor);
+        tabHost.setBackgroundColor(roomColor);
         tabWidget = (TabWidget) findViewById(android.R.id.tabs);
         mIndicator = findViewById(R.id.indicator);
 
         /** タブ関連 */
         // ViewPagerのセットアップ
-        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager(), roomId, roomName);
+        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager(), roomId, roomName, roomColor);
         pager.setAdapter(adapter);
         // タブの設定
         tabHost.setup();

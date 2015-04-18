@@ -2,7 +2,7 @@
 <resources>
 
     <!-- ToolBar 使用時 -->
-    <style name="Theme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- ToolBarの背景色 -->
         <item name="colorPrimary">@color/grey800</item>
         <item name="colorPrimaryDark">@color/grey800</item>

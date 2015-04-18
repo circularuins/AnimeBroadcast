@@ -2,10 +2,10 @@
 <resources>
 
     <!-- ToolBar 使用時 -->
-    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- ToolBarの背景色 -->
-        <item name="colorPrimary">@color/cyan500</item>
-        <item name="colorPrimaryDark">@color/cyan600</item>
+        <item name="colorPrimary">@color/grey800</item>
+        <item name="colorPrimaryDark">@color/grey800</item>
         <!-- ToolBarのタイトルテキスト色 -->
         <item name="android:textColorPrimary">@color/white</item>
         <!-- ToolBarのオプションメニューのOverflowアイコンの色 -->

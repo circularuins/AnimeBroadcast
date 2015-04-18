@@ -39,7 +39,8 @@
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/editChat"
-                android:background="@color/cyan500"
+                android:background="@color/white"
+                android:textColor="@color/black"
                 android:elevation="8dp"
                 android:minLines="1"
                 android:maxLines="5"/>

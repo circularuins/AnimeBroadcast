@@ -34,9 +34,9 @@
         <View
             android:id="@+id/indicator"
             android:layout_width="wrap_content"
-            android:layout_height="2dp"
+            android:layout_height="3dp"
             android:layout_gravity="bottom"
-            android:background="#a05" />
+            android:background="@color/white" />
 
     </TabHost>
 

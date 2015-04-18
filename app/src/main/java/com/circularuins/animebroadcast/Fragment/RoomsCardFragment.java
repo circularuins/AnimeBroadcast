@@ -3,10 +3,12 @@ package com.circularuins.animebroadcast.Fragment;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.circularuins.animebroadcast.Activity.RoomActivity;
 import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Population;
@@ -97,15 +102,16 @@ public class RoomsCardFragment extends Fragment {
         });
 
         ArrayList<Room> rooms = getArguments().getParcelableArrayList("rooms");
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
         llCardRoom = (LinearLayout)view.findViewById(R.id.cardLinearRoom);
         llCardRoom.removeAllViews();
-        // シングルトンのイメージローダーを取得
+        // シングルトンのイメージローダーとキューを取得
         ImageLoader imageLoader = AnimeBroadcastApplication.getInstance().getImageLoader();
+        RequestQueue queue = AnimeBroadcastApplication.getInstance().getRequestQueue();
         int i = 0;
         for(final Room room : rooms) {
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.card_room, null);
-            CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
+            final CardView cardView = (CardView) linearLayout.findViewById(R.id.cardViewRoom);
             ImageView cardImg = (ImageView) linearLayout.findViewById(R.id.cardImg);
             TextView cardName = (TextView) linearLayout.findViewById(R.id.cardName);
             TextView cardPost = (TextView) linearLayout.findViewById(R.id.cardPost);
@@ -121,23 +127,46 @@ public class RoomsCardFragment extends Fragment {
             }
             ImageLoader.ImageListener listener = ImageLoader.getImageListener(cardImg, R.drawable.munoji, R.drawable.kiseki_delete);
             cardImg.setTag(imageLoader.get(room.getImageUrl(), listener));
+            // カードビューの背景色を画像から取得する
+            queue.add(new ImageRequest(room.getImageUrl(),
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bm) {
+                            Palette.generateAsync(bm, new Palette.PaletteAsyncListener() {
+                                public void onGenerated(Palette palette) {
+                                    final int roomColor;
+                                    if (palette != null) {
+                                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+                                        if (vibrantSwatch != null) {
+                                            roomColor = vibrantSwatch.getRgb();
+                                            cardView.setCardBackgroundColor(roomColor);
+                                        } else {
+                                            roomColor = R.color.white;
+                                        }
+                                        cardView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(getActivity(), RoomActivity.class);
+                                                intent.putExtra("room_id", room.getRoomId());
+                                                intent.putExtra("room_name", room.getRoomName());
+                                                intent.putExtra("room_url", room.getImageUrl());
+                                                intent.putExtra("room_color", roomColor);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                if (Build.VERSION.SDK_INT < 21) {
+                                                    startActivity(intent);
+                                                } else {
+                                                    startActivity(intent,
+                                                            ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }, 0, 0, Bitmap.Config.ARGB_8888, null));
+
             cardView.setTag(i);
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), RoomActivity.class);
-                    intent.putExtra("room_id", room.getRoomId());
-                    intent.putExtra("room_name", room.getRoomName());
-                    intent.putExtra("room_url", room.getImageUrl());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    if (Build.VERSION.SDK_INT < 21) {
-                        startActivity(intent);
-                    } else {
-                        startActivity(intent,
-                                ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-                    }
-                }
-            });
             linearLayout.setTag(R.string.card_view_tag1, room.getRoomId());
             llCardRoom.addView(linearLayout, i);
             i++;

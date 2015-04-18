@@ -50,6 +50,7 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ROOM_ID = "room_id";
     private static final String ROOM_NAME = "room_name";
+    private static final String ROOM_COLOR = "room_color";
 
     private InputMethodManager inputMethodManager;
     private List<Chat> chats = new ArrayList<>();
@@ -59,6 +60,7 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
     private Gson gson;
     private String mRoomId;
     private String mRoomName;
+    private int mRoomColor;
     private ImageLoader imageLoader;
 
     @InjectView(R.id.llParent) LinearLayout llParent;
@@ -74,11 +76,12 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
      * @param roomName Parameter 2.
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(String roomId, String roomName) {
+    public static ChatFragment newInstance(String roomId, String roomName, int roomColor) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putString(ROOM_ID, roomId);
         args.putString(ROOM_NAME, roomName);
+        args.putInt(ROOM_COLOR, roomColor);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,6 +96,7 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
         if (getArguments() != null) {
             mRoomId = getArguments().getString(ROOM_ID);
             mRoomName = getArguments().getString(ROOM_NAME);
+            mRoomColor = getArguments().getInt(ROOM_COLOR);
         }
     }
 
@@ -105,6 +109,7 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
         final ImageButton btn = (ImageButton)view.findViewById(R.id.btnPost);
         final ImageButton btnPhoto = (ImageButton)view.findViewById(R.id.btnPhoto);
         listChat.setListener(this);
+        listChat.setBackgroundColor(mRoomColor);
 
         // キーボードを初期表示しない
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

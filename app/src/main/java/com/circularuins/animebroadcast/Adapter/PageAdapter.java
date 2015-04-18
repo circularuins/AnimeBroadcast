@@ -11,11 +11,13 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     private String roomId;
     private String roomName;
+    private int roomColor;
 
-    public PageAdapter(FragmentManager fm, String roomId, String roomName) {
+    public PageAdapter(FragmentManager fm, String roomId, String roomName, int roomColor) {
         super(fm);
         this.roomId = roomId;
         this.roomName = roomName;
+        this.roomColor = roomColor;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 return new TestFragment1();
             case 1:
-                return ChatFragment.newInstance(roomId, roomName);
+                return ChatFragment.newInstance(roomId, roomName, roomColor);
             case 2:
                 return new TestFragment1();
         }
