@@ -2,6 +2,7 @@ package com.circularuins.animebroadcast.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,13 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Chat;
 import com.circularuins.animebroadcast.R;
+import com.circularuins.animebroadcast.Util.CustomListView;
 import com.circularuins.animebroadcast.Util.HideKey;
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.google.gson.Gson;
@@ -45,7 +46,7 @@ import butterknife.InjectView;
  * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements CustomListView.OnKeyboardAppearedListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ROOM_ID = "room_id";
     private static final String ROOM_NAME = "room_name";
@@ -62,7 +63,7 @@ public class ChatFragment extends Fragment {
 
     @InjectView(R.id.llParent) LinearLayout llParent;
     @InjectView(R.id.editChat) EditText editChat;
-    @InjectView(R.id.listChat) ListView listChat;
+    @InjectView(R.id.listChat) CustomListView listChat;
 
 
     /**
@@ -103,6 +104,7 @@ public class ChatFragment extends Fragment {
         ButterKnife.inject(this, view); //フラグメントの場合はビューを渡す
         final ImageButton btn = (ImageButton)view.findViewById(R.id.btnPost);
         final ImageButton btnPhoto = (ImageButton)view.findViewById(R.id.btnPhoto);
+        listChat.setListener(this);
 
         // キーボードを初期表示しない
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -272,5 +274,27 @@ public class ChatFragment extends Fragment {
             return v;
         }
 
+    }
+
+    @Override
+    public void onKeyboardAppeared(boolean isChange) {
+
+        //ListView生成済、且つサイズ変更した（キーボードが出現した）場合
+        if(isChange){
+
+            //リストアイテムの総数-1（0番目から始まって最後のアイテム）にスクロールさせる
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    //リストアイテムの総数-1（0番目から始まって最後のアイテム）にフォーカスさせる
+                    listChat.smoothScrollToPosition(listChat.getCount()-1);
+                }
+            };
+            handler.postDelayed(runnable, 300);
+
+            //スクロールアニメーションが要らない場合はこれでOK
+            //listView.setSelection(listView.getCount()-1);
+        }
     }
 }
