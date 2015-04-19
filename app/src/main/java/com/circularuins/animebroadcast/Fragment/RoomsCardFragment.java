@@ -244,6 +244,26 @@ public class RoomsCardFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(ws != null) {
+            ws.close();
+            ws = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(ws != null) {
+            ws.close();
+            ws = null;
+        }
+    }
+
     private Handler mHandler = new Handler();
     private final Runnable mRefreshDone = new Runnable() {
 

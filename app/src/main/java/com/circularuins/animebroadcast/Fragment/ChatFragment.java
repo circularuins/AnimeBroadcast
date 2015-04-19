@@ -191,12 +191,24 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        if(ws != null) {
+            ws.close();
+            ws = null;
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
         // 切断コードを送信して、ルームから退出する
         if(ws != null) {
             ws.send("h8ze@91bmkfp3");
+            ws.close();
+            ws = null;
         }
 
         // 必須
