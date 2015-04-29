@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_gravity="end"
-        android:background="@drawable/chat_bg"
+        android:background="@drawable/chat_bg_other"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"

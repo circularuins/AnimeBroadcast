@@ -1,6 +1,7 @@
 package com.circularuins.animebroadcast.Fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -257,6 +260,13 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
                         chatId.setText("ID : " + chat.getUserId());
                         chatText.setText(chat.getChatText());
                         chatDate.setText(chat.getPostTime());
+
+                        // リストへの追加時のみアニメーションさせる
+                        if(adapter.getCount() == position + 1 && !chats.get(position).isDisplayed()) {
+                            Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.chat_motion1);
+                            v.startAnimation(anim);
+                            chats.get(position).setDisplayed(true);
+                        }
                     } else {
                         v = inflater.inflate(R.layout.chat_item2, null);
 
@@ -267,12 +277,20 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
                         chatId.setText("ID : " + chat.getUserId());
                         chatText.setText(chat.getChatText());
                         chatDate.setText(chat.getPostTime());
+
+                        // リストへの追加時のみアニメーションさせる
+                        if(adapter.getCount() == position + 1 && !chats.get(position).isDisplayed()) {
+                            Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.chat_motion2);
+                            v.startAnimation(anim);
+                            chats.get(position).setDisplayed(true);
+                        }
                     }
                 } else if(chat.getReturnMessage() != null) {
                     v = inflater.inflate(R.layout.chat_message, null);
 
                     chatMsg = (TextView) v.findViewById(R.id.chatMessage);
                     chatMsg.setText(chat.getReturnMessage());
+                    chatMsg.setTextColor(Color.WHITE);
                 } else if(chat.getImageUrl() != null) {
                     v = inflater.inflate(R.layout.chat_image, null);
 

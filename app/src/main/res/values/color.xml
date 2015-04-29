@@ -11,4 +11,6 @@
     <color name="green500">#4CAF50</color>
     <color name="yellow500">#FFEB3B</color>
     <color name="grey800">#424242</color>
+    <color name="pink400">#EC407A</color>
+    <color name="pink600">#D81B60</color>
 </resources>

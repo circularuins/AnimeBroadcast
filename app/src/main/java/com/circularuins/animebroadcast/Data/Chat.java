@@ -22,6 +22,8 @@ public class Chat {
     @SerializedName("image_url")
     private String imageUrl;
 
+    private boolean isDisplayed;
+
     public String getUserId() {
         return userId;
     }
@@ -60,5 +62,13 @@ public class Chat {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isDisplayed() {
+        return isDisplayed;
+    }
+
+    public void setDisplayed(boolean isDisplayed) {
+        this.isDisplayed = isDisplayed;
     }
 }
