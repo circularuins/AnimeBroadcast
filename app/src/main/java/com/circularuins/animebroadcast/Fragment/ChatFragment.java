@@ -42,6 +42,8 @@ import org.jdeferred.android.DeferredAsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -270,7 +272,18 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
 
                         chatId.setText("ID : " + chat.getUserId());
                         chatText.setText(chat.getChatText());
-                        chatDate.setText(chat.getPostTime());
+                        Matcher m = Pattern.compile("T(\\d+):(\\d+)").matcher(chat.getPostTime());
+                        if (m.find()){
+                            String period;
+                            int hour = Integer.parseInt(m.group(1));
+                            if(hour > 12) {
+                                hour = hour - 12;
+                                period = "PM";
+                            } else {
+                                period = "AM";
+                            }
+                            chatDate.setText(hour + ":" + m.group(2) + " " + period);
+                        }
 
                         // リストへの追加時のみアニメーションさせる
                         if(adapter.getCount() == position + 1 && !chats.get(position).isDisplayed()) {
@@ -287,7 +300,18 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
 
                         chatId.setText("ID : " + chat.getUserId());
                         chatText.setText(chat.getChatText());
-                        chatDate.setText(chat.getPostTime());
+                        Matcher m = Pattern.compile("T(\\d+):(\\d+)").matcher(chat.getPostTime());
+                        if (m.find()){
+                            String period;
+                            int hour = Integer.parseInt(m.group(1));
+                            if(hour > 12) {
+                                hour = hour - 12;
+                                period = "PM";
+                            } else {
+                                period = "AM";
+                            }
+                            chatDate.setText(hour + ":" + m.group(2) + " " + period);
+                        }
 
                         // リストへの追加時のみアニメーションさせる
                         if(adapter.getCount() == position + 1 && !chats.get(position).isDisplayed()) {

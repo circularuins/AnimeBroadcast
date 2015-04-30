@@ -31,11 +31,17 @@
             android:textColor="@color/white"
             android:text="text"
             android:id="@+id/chatText2"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_marginLeft="2dp"
+            android:layout_gravity="bottom"
             android:textColor="@color/white"
             android:text="date"
             android:id="@+id/chatDate2"/>
