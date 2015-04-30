@@ -1,6 +1,7 @@
 package com.circularuins.animebroadcast.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.circularuins.animebroadcast.Activity.MainActivity;
 import com.circularuins.animebroadcast.AnimeBroadcastApplication;
 import com.circularuins.animebroadcast.Data.Chat;
 import com.circularuins.animebroadcast.R;
@@ -149,6 +152,14 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
                                 String postChat = editChat.getText().toString();
 
                                 if(postChat.length()!= 0) {
+                                    if(ws == null) {
+                                        //TODO 表示が見える前にActivityなくなってしまうので、ダイアログにする
+                                        Toast.makeText(getActivity(), "通信が切断しました", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        return;
+                                    }
                                     ws.send(postChat);
                                     ws.setStringCallback(new WebSocket.StringCallback() {
                                         @Override
