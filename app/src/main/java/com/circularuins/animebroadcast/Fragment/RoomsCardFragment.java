@@ -13,6 +13,8 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -170,6 +172,15 @@ public class RoomsCardFragment extends Fragment {
 
             cardView.setTag(i);
             linearLayout.setTag(R.string.card_view_tag1, room.getRoomId());
+            //アニメーション
+            Animation anim;
+            if(i % 2 == 0) {
+                anim = AnimationUtils.loadAnimation(getActivity(), R.anim.room_motion1);
+            } else {
+                anim = AnimationUtils.loadAnimation(getActivity(), R.anim.room_motion2);
+            }
+            linearLayout.startAnimation(anim);
+            //chats.get(position).setDisplayed(true);
             llCardRoom.addView(linearLayout, i);
             i++;
         }
