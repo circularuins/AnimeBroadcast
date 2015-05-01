@@ -4,17 +4,18 @@
     android:orientation="horizontal"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"></FrameLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,32 +25,26 @@
             android:textColor="@color/white"
             android:text="date"
             android:id="@+id/chatDate1"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_gravity="end"
-        android:background="@drawable/chat_bg"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:padding="5dp"
-        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
+            android:layout_gravity="end"
+            android:background="@drawable/chat_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="id"
-            android:id="@+id/chatID1"/>
+            android:padding="5dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:text="text"
-            android:id="@+id/chatText1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/white"
+                android:text="text"
+                android:id="@+id/chatText1"/>
+        </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout>

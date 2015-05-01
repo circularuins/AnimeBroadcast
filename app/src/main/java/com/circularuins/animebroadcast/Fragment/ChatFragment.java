@@ -266,11 +266,9 @@ public class ChatFragment extends Fragment implements CustomListView.OnKeyboardA
                     if(chat.getUserId().equals(userId)) {
                         v = inflater.inflate(R.layout.chat_item1, null);
 
-                        chatId = (TextView) v.findViewById(R.id.chatID1);
                         chatText = (TextView) v.findViewById(R.id.chatText1);
                         chatDate = (TextView) v.findViewById(R.id.chatDate1);
 
-                        chatId.setText("ID : " + chat.getUserId());
                         chatText.setText(chat.getChatText());
                         Matcher m = Pattern.compile("T(\\d+):(\\d+)").matcher(chat.getPostTime());
                         if (m.find()){
