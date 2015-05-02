@@ -15,6 +15,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="3dp"
         android:orientation="horizontal">
 
         <TextView
@@ -24,6 +25,7 @@
             android:layout_gravity="bottom"
             android:textColor="@color/white"
             android:text="date"
+            android:textSize="12sp"
             android:id="@+id/chatDate1"/>
 
 
@@ -38,10 +40,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_margin="5dp"
                 android:textColor="@color/white"
                 android:text="text"
+                android:textSize="16sp"
                 android:id="@+id/chatText1"/>
         </LinearLayout>
     </LinearLayout>
