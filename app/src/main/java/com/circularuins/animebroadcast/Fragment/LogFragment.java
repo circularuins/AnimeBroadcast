@@ -115,6 +115,7 @@ public class LogFragment extends Fragment {
 
                 adapter = new LogAdapter(list);
                 listLog.setAdapter(adapter);
+                listLog.setSelection(listLog.getCount() - 1); //リストの最下部を表示する
             }
         }).fail(new FailCallback<Throwable>() {
             @Override
