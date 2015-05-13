@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.circularuins.animebroadcast.Fragment.ChatFragment;
+import com.circularuins.animebroadcast.Fragment.LogFragment;
 import com.circularuins.animebroadcast.Fragment.TestFragment1;
 
 public class PageAdapter extends FragmentPagerAdapter {
@@ -28,7 +29,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 1:
                 return ChatFragment.newInstance(roomId, roomName, roomColor);
             case 2:
-                return new TestFragment1();
+                return LogFragment.newInstance(roomId, roomColor);
         }
         return null;
     }

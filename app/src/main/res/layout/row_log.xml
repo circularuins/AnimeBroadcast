@@ -22,8 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:id="@+id/rowName"
-            android:text="name"
+            android:id="@+id/rowId"
+            android:text="ID"
             android:textAppearance="?android:attr/textAppearance" />
 
     </LinearLayout>

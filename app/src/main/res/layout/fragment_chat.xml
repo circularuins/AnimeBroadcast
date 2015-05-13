@@ -6,50 +6,45 @@
     android:orientation="vertical"
     tools:context=".ChatFragment">
 
-        <TextView
+    <com.circularuins.animebroadcast.Util.CustomListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:id="@+id/listChat"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/roomTitle"/>
+            android:id="@+id/btnPhoto"
+            android:src="@drawable/ic_camera_alt_black_36dp"/>
 
-        <com.circularuins.animebroadcast.Util.CustomListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:divider="@null"
-            android:id="@+id/listChat"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="4"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/editChat"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:elevation="8dp"
+            android:minLines="1"
+            android:maxLines="5"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnPhoto"
-                android:src="@drawable/ic_camera_alt_black_36dp"/>
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_weight="4"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/editChat"
-                android:background="@color/white"
-                android:textColor="@color/black"
-                android:elevation="8dp"
-                android:minLines="1"
-                android:maxLines="5"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnPost"
-                android:src="@drawable/ic_chat_black_36dp"/>
-        </LinearLayout>
+            android:id="@+id/btnPost"
+            android:src="@drawable/ic_chat_black_36dp"/>
+    </LinearLayout>
 
 </LinearLayout>
