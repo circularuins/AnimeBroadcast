@@ -153,6 +153,7 @@ public class RoomsCardFragment extends Fragment {
                                                 intent.putExtra("room_name", room.getRoomName());
                                                 intent.putExtra("room_url", room.getImageUrl());
                                                 intent.putExtra("room_color", roomColor);
+                                                intent.putExtra("program_url", room.getProgramUrl());
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 if (Build.VERSION.SDK_INT < 21) {
                                                     startActivity(intent);

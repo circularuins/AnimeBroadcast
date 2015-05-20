@@ -65,6 +65,7 @@ public class RoomActivity extends ActionBarActivity
         String roomName = getIntent().getStringExtra("room_name");
         final String roomUrl = getIntent().getStringExtra("room_url");
         int roomColor = getIntent().getIntExtra("room_color", R.color.white);
+        String programUrl = getIntent().getStringExtra("program_url");
 
         // ナビゲーションドロワー
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -115,7 +116,7 @@ public class RoomActivity extends ActionBarActivity
 
         /** タブ関連 */
         // ViewPagerのセットアップ
-        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager(), roomId, roomName, roomColor);
+        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager(), roomId, roomName, roomColor, programUrl);
         pager.setAdapter(adapter);
         // タブの設定
         tabHost.setup();
@@ -149,6 +150,7 @@ public class RoomActivity extends ActionBarActivity
             }
         });
         pager.setCurrentItem(1, false); //チャットページを初期表示
+        pager.setOffscreenPageLimit(2);
         //ページ切り替え後すぐにページのスクロールをキャンセルする
         pager.dispatchTouchEvent(MotionEvent.obtain
                 (SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_CANCEL, 0, 0, 0));

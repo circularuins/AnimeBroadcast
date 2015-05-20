@@ -6,26 +6,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.circularuins.animebroadcast.Fragment.ChatFragment;
 import com.circularuins.animebroadcast.Fragment.LogFragment;
-import com.circularuins.animebroadcast.Fragment.TestFragment1;
+import com.circularuins.animebroadcast.Fragment.ProgramFragment;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
     private String roomId;
     private String roomName;
     private int roomColor;
+    private String programUrl;
 
-    public PageAdapter(FragmentManager fm, String roomId, String roomName, int roomColor) {
+    public PageAdapter(FragmentManager fm, String roomId, String roomName, int roomColor, String programUrl) {
         super(fm);
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomColor = roomColor;
+        this.programUrl = programUrl;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return new TestFragment1();
+                return ProgramFragment.newInstance(programUrl);
             case 1:
                 return ChatFragment.newInstance(roomId, roomName, roomColor);
             case 2:
@@ -43,7 +45,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0:
-                return "詳細";
+                return "動画";
             case 1:
                 return "チャット";
             case 2:

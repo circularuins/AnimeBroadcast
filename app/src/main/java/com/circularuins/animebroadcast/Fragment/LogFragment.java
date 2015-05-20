@@ -132,6 +132,13 @@ public class LogFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ButterKnife.reset(this);
+    }
+
     private RowModel getModel(int position) {
         return (((LogAdapter)listLog.getAdapter()).getItem(position));
     }

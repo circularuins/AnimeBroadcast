@@ -29,15 +29,19 @@ public class Room implements Parcelable {
     @SerializedName("image_url")
     private String imageUrl;
 
+    @SerializedName("program_url")
+    private String programUrl;
+
     public Bitmap image;
 
-    public Room(String roomId, String roomName, int countPosts, String createdOn, String updatedOn, String imageUrl) {
+    public Room(String roomId, String roomName, int countPosts, String createdOn, String updatedOn, String imageUrl, String programUrl) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.countPosts = countPosts;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
         this.imageUrl = imageUrl;
+        this.programUrl = programUrl;
     }
 
     /**
@@ -55,6 +59,7 @@ public class Room implements Parcelable {
         createdOn = in.readString();
         updatedOn = in.readString();
         imageUrl = in.readString();
+        programUrl = in.readString();
     }
 
     @Override
@@ -65,6 +70,7 @@ public class Room implements Parcelable {
         dest.writeString(createdOn);
         dest.writeString(updatedOn);
         dest.writeString(imageUrl);
+        dest.writeString(programUrl);
     }
 
     //よくわからないが、staticで実装しないといけないらしい
@@ -128,5 +134,13 @@ public class Room implements Parcelable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getProgramUrl() {
+        return programUrl;
+    }
+
+    public void setProgramUrl(String programUrl) {
+        this.programUrl = programUrl;
     }
 }
