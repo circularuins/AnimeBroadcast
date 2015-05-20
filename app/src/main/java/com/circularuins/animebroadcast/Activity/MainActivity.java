@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity
         rooms.add(new Room("r2", "寄生獣 最終話", 23, "2015/04/03 01:35", "2015/04/03 01:35", "http://feelgoodokinawa1945.com/wp-content/uploads/2014/03/9fafd31a7971f7cdea200133a182f9de.jpg", "http://ja.wikipedia.org/wiki/%E5%AF%84%E7%94%9F%E7%8D%A3"));
         rooms.add(new Room("r3", "蒼穹のファフナーEXODUS 23話", 1000, "2015/04/03 01:35", "2015/04/03 01:35", "http://img.youtube.com/vi/e9X36_ELxWE/sddefault.jpg", "http://www.anitube.se/video/82445/Soukyuu-no-Fafner-Dead-Aggressor--Exodus-13-Final"));
         rooms.add(new Room("r4", "スペース☆ダンディ 23話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://livedoor.4.blogimg.jp/nizigami/imgs/a/4/a4927cb1.jpg", "http://www.anitube.se/video/82445/Soukyuu-no-Fafner-Dead-Aggressor--Exodus-13-Final"));
-        rooms.add(new Room("r5", "魔法少女まどか☆マギカ 10話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://blog-imgs-62.fc2.com/n/o/s/nosweetwithoutsweat/kyoko.jpg", "http://www.anitube.se/video/82445/Soukyuu-no-Fafner-Dead-Aggressor--Exodus-13-Final"));
+        rooms.add(new Room("r5", "魔法少女まどか☆マギカ 9話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://blog-imgs-62.fc2.com/n/o/s/nosweetwithoutsweat/kyoko.jpg", "http://www.anitube.se/video/57456/Mahou-Shoujo-Madoka-Magika-09"));
         rooms.add(new Room("r6", "攻殻機動隊 99話", 999, "2015/04/03 01:35", "2015/04/03 01:35", "http://image.eiga.k-img.com/images/movie/55879/original.jpg?1396890531", "http://www.anitube.se/video/82445/Soukyuu-no-Fafner-Dead-Aggressor--Exodus-13-Final"));
 
         // 部屋一覧のcardviewをセットする

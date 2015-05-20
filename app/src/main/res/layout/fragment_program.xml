@@ -9,4 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/webView">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btnback"
+            android:textColor="@color/black"
+            android:text="BACK"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btnFwd"
+            android:textColor="@color/black"
+            android:text="FWD"/>
+    </RelativeLayout>
+
 </RelativeLayout>

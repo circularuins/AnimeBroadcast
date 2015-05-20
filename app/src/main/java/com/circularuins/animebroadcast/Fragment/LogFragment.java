@@ -26,6 +26,8 @@ import org.jdeferred.android.AndroidDeferredManager;
 import org.jdeferred.android.DeferredAsyncTask;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -188,7 +190,10 @@ public class LogFragment extends Fragment {
 
             holder.id.setText(model.id);
             holder.text.setText(model.text);
-            holder.date.setText(model.date);
+            Matcher m = Pattern.compile("(\\d+)-(\\d+)-(\\d+)T(\\d+):(\\d+)").matcher(model.date);
+            if (m.find()){
+                holder.date.setText(m.group(1) + "/" + m.group(2) + "/" + m.group(3) + " " + m.group(4) + ":" + m.group(5));
+            }
 
             return convertView;
         }

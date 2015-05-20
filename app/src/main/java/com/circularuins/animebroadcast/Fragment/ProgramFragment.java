@@ -13,6 +13,7 @@ import com.circularuins.animebroadcast.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 /**
@@ -67,7 +68,7 @@ public class ProgramFragment extends Fragment {
         webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
         //webView.getSettings().setAppCacheEnabled(true);
-        //webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         //webView.getSettings().setSaveFormData(true);
@@ -82,5 +83,15 @@ public class ProgramFragment extends Fragment {
 
         webView.loadData("", "text/html", "utf-8");
         ButterKnife.reset(this);
+    }
+
+    @OnClick(R.id.btnback)
+    void back() {
+        webView.goBack();
+    }
+
+    @OnClick(R.id.btnFwd)
+    void fwd() {
+        webView.goForward();
     }
 }
